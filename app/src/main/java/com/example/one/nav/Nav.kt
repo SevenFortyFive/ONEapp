@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.one.helper.vibrate
 import com.example.one.myui.UtilsUi.AlertDialogExample
 import com.example.one.myui.HotMap.ComprehensiveHotMap
 import com.example.one.myui.AudioUi.Player
@@ -79,7 +80,7 @@ fun MainScreen(navController: NavHostController)
     val showBusyDialog = remember {
         mutableStateOf(false)
     }
-
+    val context = LocalContext.current
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -115,6 +116,7 @@ fun MainScreen(navController: NavHostController)
                     },
                         selected = currentRoute == it.route,
                         onClick = {
+                            vibrate(context,100)
                             if(ifBusy){
                                 showBusyDialog.value = true
                             }
@@ -147,6 +149,7 @@ fun MainScreen(navController: NavHostController)
                     actions = {
                         menuItems.forEach{
                             IconButton(onClick = {
+                                vibrate(context,100)
                                 if(ifBusy)
                                 {
                                     showBusyDialog.value = true

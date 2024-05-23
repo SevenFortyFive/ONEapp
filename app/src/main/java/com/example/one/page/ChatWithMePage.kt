@@ -35,7 +35,7 @@ import com.example.one.helper.Toaster
 import com.example.one.setting.Setting
 
 const val MY_EMAIL_ADDRESS = "yooo_fan@163.com"
-const val MY_GITHUB_URL = "http://www.baidu.com"
+const val MY_GITHUB_URL = "https://github.com/SevenFortyFive/ONEapp.git"
 const val MY_WECHAT = "Yooo_Fan"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

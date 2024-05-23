@@ -42,6 +42,7 @@ import com.example.one.helper.TimeFormatUtils
 import com.example.one.helper.getCurrentDay
 import com.example.one.helper.getCurrentMonth
 import com.example.one.helper.getCurrentYear
+import com.example.one.helper.vibrate
 import com.example.one.myui.UtilsUi.AlertDialogExample
 import com.example.one.myui.UtilsUi.MyChart
 import com.example.one.myui.UtilsUi.ProgressCircle
@@ -151,6 +152,7 @@ fun ClockStateBoxController(
     val tryToBegin = remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
     LaunchedEffect(ifUpsetDown.value,tryToBegin.value) {
         if(tryToBegin.value && ifUpsetDown.value == true)
         {
@@ -198,6 +200,7 @@ fun ClockStateBoxController(
                         defaultElevation = 2.dp
                     ),onClick = {
                     // 如果设置了时长
+                        vibrate(context,100)
                     if(timerViewModel.timeLeft != 0L)
                     {
                         tryToBegin.value = true
@@ -212,6 +215,7 @@ fun ClockStateBoxController(
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 2.dp
                     ),onClick = {
+                        vibrate(context,100)
                     timerViewModel.status.clickStopButton()
                 },
                     enabled = timerViewModel.status.stopButtonEnabled()) {

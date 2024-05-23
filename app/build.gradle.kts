@@ -75,9 +75,6 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.material3.android)
     // 高德定位jar
-    implementation(files("libs/AMap_Location_V6.4.3_20240314.jar"))
-    implementation(libs.play.services.maps)
-    implementation(libs.androidx.media3.ui)
     val room_version = "2.6.1"
 
     implementation(libs.androidx.room.runtime)

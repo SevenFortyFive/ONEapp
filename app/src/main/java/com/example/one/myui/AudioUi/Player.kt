@@ -66,6 +66,7 @@ import coil.transform.CircleCropTransformation
 import com.example.one.R
 import com.example.one.data.PlayerData.PlayerState
 import com.example.one.data.SQLite.entity.MyAudioData
+import com.example.one.helper.vibrate
 import com.example.one.setting.Setting
 import com.example.one.vm.MyAudioViewModelFactory
 
@@ -78,7 +79,7 @@ fun Player(){
 
     val playerState = vm.currentState.observeAsState()
     val currentData by vm.currentAudioData.observeAsState()
-
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .animateContentSize()
@@ -136,10 +137,14 @@ fun Player(){
                 Spacer(modifier = Modifier.height(2.dp))
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly){
-                    IconButton(onClick = { vm.preAudio() }) {
+                    IconButton(onClick = {
+                        vibrate(context,100)
+                        vm.preAudio() }
+                    ) {
                         Icon(imageVector = Icons.Rounded.KeyboardArrowLeft, contentDescription = "fore audio")
                     }
                     IconButton(onClick = {
+                        vibrate(context,100)
                         if(playerState.value == PlayerState.STOP)
                         {
                             vm.start()
@@ -154,7 +159,9 @@ fun Player(){
                             Icon(imageVector = Icons.Rounded.PlayArrow, contentDescription = "begin")
                         }
                     }
-                    IconButton(onClick = { vm.nextAudio() }) {
+                    IconButton(onClick = {
+                        vibrate(context,100)
+                        vm.nextAudio() }) {
                         Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "next audio")
                     }
                 }

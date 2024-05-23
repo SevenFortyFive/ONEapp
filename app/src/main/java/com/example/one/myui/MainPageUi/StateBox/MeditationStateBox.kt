@@ -51,6 +51,7 @@ import com.example.one.helper.TimeFormatUtils
 import com.example.one.helper.getCurrentDay
 import com.example.one.helper.getCurrentMonth
 import com.example.one.helper.getCurrentYear
+import com.example.one.helper.vibrate
 import com.example.one.myui.UtilsUi.MyChart
 import com.example.one.setting.Setting
 import com.example.one.timer.TimerStatus.IStatus
@@ -123,6 +124,7 @@ fun MeditationStateBox(timerViewModel: TimerViewModel) {
     LaunchedEffect(verticalPagerState.currentPage){
         playerViewModel.setAudioItemWithIndex(verticalPagerState.currentPage)
     }
+    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize())
     {
@@ -188,6 +190,7 @@ fun MeditationStateBox(timerViewModel: TimerViewModel) {
                                     horizontalArrangement = Arrangement.Center,
                                     verticalAlignment = Alignment.CenterVertically) {
                                     IconButton(onClick = {
+                                        vibrate(context,100)
                                         playerViewModel.changeItemLoveState(currentData!!)
                                     }) {
                                         if(currentData?.love == true)
@@ -198,6 +201,7 @@ fun MeditationStateBox(timerViewModel: TimerViewModel) {
                                         }
                                     }
                                     IconButton(onClick = {
+                                        vibrate(context,100)
                                         if(playerState.value == PlayerState.STOP)
                                         {
                                             playerViewModel.start()
@@ -237,7 +241,7 @@ fun TimerInMeditationStateBox(
         LocalContext.current as ComponentActivity
         ,factory = MyAudioViewModelFactory(LocalContext.current.applicationContext as Application)
     )
-
+    val context = LocalContext.current
     Box(modifier = modifier)
     {
         Row (modifier = Modifier.fillMaxSize(),
@@ -253,6 +257,7 @@ fun TimerInMeditationStateBox(
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 2.dp
                     ),onClick = {
+                        vibrate(context,100)
                     vm.pause()
                     if(timerViewModel.status is StartedStatus)
                     {
@@ -270,6 +275,7 @@ fun TimerInMeditationStateBox(
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 2.dp
                     ),onClick = {
+                        vibrate(context,100)
                     timerViewModel.status.clickStopButton()
                 },
                     enabled = timerViewModel.status.stopButtonEnabled()

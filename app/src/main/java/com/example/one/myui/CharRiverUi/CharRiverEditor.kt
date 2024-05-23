@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedButton
@@ -36,10 +37,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.one.data.CharRiverData.getCharRiverPrecisionDataList
+import com.example.one.helper.vibrate
+import com.example.one.myui.UtilsUi.AlertDialogExample
 import com.example.one.myui.UtilsUi.LoadingIndicator
 import com.example.one.setting.Setting
+import com.example.one.vm.AppViewModel
 
 @Composable
 fun CharRiverEditor(
@@ -52,11 +57,14 @@ fun CharRiverEditor(
     val text = remember {
         mutableStateOf("")
     }
-
+    val showSheet = remember {
+        mutableStateOf(false)
+    }
     val precision = remember {
         mutableIntStateOf(30)
     }
-
+    val context = LocalContext.current
+    val appViewModel:AppViewModel = AppViewModel.getInstance()
     Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center){
             Card( modifier = modifier
@@ -68,7 +76,9 @@ fun CharRiverEditor(
                 ),
                 shape = RoundedCornerShape(Setting.WholeElevation)
             ) {
-                Box(modifier = Modifier.fillMaxWidth().height(32.dp))
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(32.dp))
                 {
                     LoadingIndicator(loading = onLoading)
                 }
@@ -78,27 +88,49 @@ fun CharRiverEditor(
                     InputText(text = text,precision)
                     Spacer(modifier = Modifier.height(10.dp))
                     Row {
-                        ElevatedButton(onClick = { start() }) {
+                        ElevatedButton(onClick = {
+                            vibrate(context,100)
+                            appViewModel.setAppBusy()
+                            start()
+                        }) {
                             Text(text = "开始")
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                         ElevatedButton(onClick = {
+                            vibrate(context,100)
                             if(text.value != "")
                             {
                                 setData(text.value,precision.intValue)
                                 text.value = ""
                                 precision.intValue = 30
+                            }else{
+                                showSheet.value = true
                             }
                         }
                         ) {
                             Text(text = "设置字符")
                         }
                         Spacer(modifier = Modifier.width(10.dp))
-                        ElevatedButton(onClick = {stop()}) {
+                        ElevatedButton(onClick =
+                        {
+                            vibrate(context,100)
+                            appViewModel.setAppBusy()
+                            stop()
+                        }) {
                             Text(text = "结束")
                         }
                     }
                 }
+        }
+        if(showSheet.value)
+        {
+            AlertDialogExample(
+                onDismissRequest = { showSheet.value = false },
+                onConfirmation = {showSheet.value = false},
+                dialogTitle = "!!!",
+                dialogText = "请输入字符串（最多八个！，多了会卡住QAQ）",
+                icon = Icons.Rounded.Check
+            )
         }
     }
 }
@@ -108,10 +140,13 @@ fun InputText(text: MutableState<String>, precision: MutableIntState)
 {
     TextField(value = text.value,
         onValueChange = {
-        text.value = it
+            if(it.length < 8)
+            {
+                text.value = it
+            }
         },
         label = {
-            Text(text = "输入字符")
+            Text(text = "输入字符(<8个)")
         },
         placeholder = {
             Text(text = "在此处输入")

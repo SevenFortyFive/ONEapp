@@ -17,8 +17,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.one.data.MainPageState
+import com.example.one.helper.vibrate
 import com.example.one.myui.UtilsUi.AlertDialogExample
 import com.example.one.setting.Setting
 import com.example.one.vm.AppViewModel
@@ -33,7 +35,7 @@ fun MainPageController(
     }
     val appViewModel = AppViewModel.getInstance()
     val ifBusy = appViewModel.ifHasTask
-
+    val context = LocalContext.current
     if(showAlertDialog.value)
     {
         AlertDialogExample(
@@ -52,6 +54,7 @@ fun MainPageController(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically) {
         ElevatedButton(onClick = {
+            vibrate(context,100)
             if(ifBusy.value)
             {
                 showAlertDialog.value = true
@@ -67,6 +70,7 @@ fun MainPageController(
         }
         Spacer(modifier = Modifier.width(10.dp))
         ElevatedButton(onClick = {
+            vibrate(context,100)
             if(ifBusy.value)
             {
                 showAlertDialog.value = true
@@ -81,6 +85,7 @@ fun MainPageController(
         }
         Spacer(modifier = Modifier.width(10.dp))
         ElevatedButton(onClick = {
+            vibrate(context,100)
             if(ifBusy.value)
             {
                 showAlertDialog.value = true
@@ -93,6 +98,7 @@ fun MainPageController(
         }
         Spacer(modifier = Modifier.width(10.dp))
         ElevatedButton(onClick = {
+            vibrate(context,100)
             if(ifBusy.value)
             {
                 showAlertDialog.value = true

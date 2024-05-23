@@ -14,9 +14,9 @@ import kotlinx.coroutines.withContext
 
 class CharRiverViewmodel() :ViewModel() {
     // 保存供外界观察的数据对象
-    private val _data:MutableLiveData<Array<Array<Int>>> = MutableLiveData<Array<Array<Int>>>()
+    private val _data: MutableLiveData<Array<Array<Int>>?> = MutableLiveData<Array<Array<Int>>?>()
 
-    val data:LiveData<Array<Array<Int>>>
+    val data: MutableLiveData<Array<Array<Int>>?>
         get() = _data
 
     private val _onLoading:MutableLiveData<Boolean> = MutableLiveData(false)
@@ -24,6 +24,11 @@ class CharRiverViewmodel() :ViewModel() {
     // 当前滚动状态，供外界观察
     val onLoading:LiveData<Boolean>
         get() = _onLoading
+
+    // 标记正在运行
+    private val _running:MutableLiveData<Boolean> = MutableLiveData(false)
+    val running:LiveData<Boolean>
+        get() = _running
 
     // 保存滚动工作
     private var job: Job? = null
@@ -69,17 +74,20 @@ class CharRiverViewmodel() :ViewModel() {
     }
 
     fun start(){
-        if(_onLoading.value == false)
+        if(_onLoading.value == false && _running.value == false)
         {
             this.job = getJob()
+            _running.value = true
             this.job!!.start()
         }
     }
 
     fun stop(){
-        if(_onLoading.value == true)
+        if(_onLoading.value == true || job!!.isActive)
         {
             this.job!!.cancel()
+            _data.value = null
+            _running.value = false
         }
     }
 

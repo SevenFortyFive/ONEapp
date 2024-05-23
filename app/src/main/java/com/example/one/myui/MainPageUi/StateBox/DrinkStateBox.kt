@@ -47,6 +47,7 @@ import com.example.one.helper.getCurrentDay
 import com.example.one.helper.getCurrentHour
 import com.example.one.helper.getCurrentMonth
 import com.example.one.helper.getCurrentYear
+import com.example.one.helper.vibrate
 import com.example.one.myui.UtilsUi.AlertDialogExample
 import com.example.one.myui.UtilsUi.MyChart
 import com.example.one.vm.DataAnalyseViewModel
@@ -147,7 +148,7 @@ fun DrinkController(updateHotMap: () -> Unit, addDrinkData: (MyDrinkData)-> Unit
     val ifShowDialog = remember {
         mutableStateOf(false)
     }
-
+    val context = LocalContext.current
     Row(modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround) {
@@ -166,6 +167,7 @@ fun DrinkController(updateHotMap: () -> Unit, addDrinkData: (MyDrinkData)-> Unit
                         if (timer == null) {
                             timer = Timer()
                             timer!!.scheduleAtFixedRate(1000, 100) {
+                                vibrate(context,10)
                                 count += 0.01f
                             }
                         }
@@ -192,6 +194,7 @@ fun DrinkController(updateHotMap: () -> Unit, addDrinkData: (MyDrinkData)-> Unit
             IconButton(onClick = {
                 if(count != 0f)
                 {
+                    vibrate(context,100)
                     addDrinkData(
                         MyDrinkData(
                         0,
@@ -213,6 +216,7 @@ fun DrinkController(updateHotMap: () -> Unit, addDrinkData: (MyDrinkData)-> Unit
                 Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
             }
             IconButton(onClick = {
+                vibrate(context,100)
                 count = 0f
             }) {
                 Icon(imageVector = Icons.Rounded.Close, contentDescription = "cancel")
